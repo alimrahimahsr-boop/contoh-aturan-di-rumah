@@ -1,0 +1,1599 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petualangan Aturan di Rumah - Media Pembelajaran Kelas 2 SD</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Nunito & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        * {
+            font-family: 'Nunito', 'Poppins', sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        body {
+            background-color: #F0F9FF;
+            background-image: radial-gradient(#E0F2FE 2px, transparent 2px);
+            background-size: 24px 24px;
+            color: #1E293B;
+        }
+        .btn-bounce {
+            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .btn-bounce:hover {
+            transform: scale(1.04) translateY(-2px);
+        }
+        .btn-bounce:active {
+            transform: scale(0.96) translateY(2px);
+        }
+        .kawaii-card {
+            border-bottom: 6px solid rgba(0,0,0,0.1);
+            transition: all 0.25s ease;
+        }
+        .kawaii-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 25px -5px rgba(0,0,0,0.1);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #F1F5F9;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #BAE6FD;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #38BDF8;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        @media print {
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            body { background: white !important; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between custom-scrollbar selection:bg-yellow-200">
+
+    <header class="no-print bg-white/90 backdrop-blur-md sticky top-0 z-40 border-b-4 border-sky-200 px-4 py-3 shadow-sm">
+        <div class="max-w-6xl mx-auto flex items-center justify-between gap-2">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="showView('view-menu')">
+                <div class="w-12 h-12 bg-yellow-300 rounded-2xl flex items-center justify-center text-2xl shadow-inner border-2 border-yellow-400 animate-float">
+                    🏠
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-sky-800 text-lg md:text-xl leading-tight">PETUALANGAN ATURAN</h1>
+                    <p class="text-xs font-bold text-sky-500 hidden sm:block">Pendidikan Pancasila • Kelas 2 SD</p>
+                </div>
+            </div>
+
+            <!-- Student Badge & Stars -->
+            <div id="user-header-badge" class="hidden flex items-center gap-2 bg-sky-50 border-2 border-sky-200 rounded-full px-3 py-1">
+                <span id="header-avatar" class="text-2xl">👦</span>
+                <div class="text-left leading-tight pr-1">
+                    <p id="header-student-name" class="font-black text-sky-900 text-xs md:text-sm truncate max-w-[100px] sm:max-w-[150px]">Murid</p>
+                    <p id="header-student-class" class="text-[10px] text-sky-600 font-bold">Kelas 2</p>
+                </div>
+                <div class="bg-amber-300 text-amber-900 font-black text-xs px-2.5 py-1 rounded-full flex items-center gap-1 shadow-sm">
+                    ⭐ <span id="header-stars">0</span>
+                </div>
+            </div>
+
+            <!-- Navigation Controls -->
+            <div class="flex items-center gap-2">
+                <button onclick="toggleAudio()" id="btn-audio" class="w-10 h-10 bg-emerald-100 text-emerald-700 hover:bg-emerald-200 rounded-2xl flex items-center justify-center font-bold btn-bounce shadow-sm" title="Musik / Suara">
+                    <i class="fa-solid fa-volume-high"></i>
+                </button>
+                <button onclick="showView('view-menu')" id="btn-home" class="hidden px-3 py-2 bg-sky-500 hover:bg-sky-600 text-white font-black text-xs sm:text-sm rounded-2xl btn-bounce flex items-center gap-1 shadow-md">
+                    <i class="fa-solid fa-house"></i>
+                    <span class="hidden md:inline">Menu Utama</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl w-full mx-auto p-4 md:p-6 flex-grow">
+
+        <!-- ================= HALAMAN PEMBUKA (WELCOME) ================= -->
+        <section id="view-welcome" class="space-y-6 text-center py-4">
+            <div class="bg-gradient-to-b from-sky-100 via-yellow-50 to-orange-100 rounded-3xl p-6 md:p-10 border-4 border-sky-200 shadow-xl relative overflow-hidden">
+                <div class="absolute top-2 left-4 text-4xl opacity-30 animate-pulse">☁️</div>
+                <div class="absolute top-6 right-8 text-4xl opacity-30 animate-pulse">☀️</div>
+
+                <div class="inline-block bg-yellow-300 text-yellow-900 font-black text-xs md:text-sm px-4 py-1.5 rounded-full shadow-sm mb-3 border-2 border-yellow-400">
+                    Fase A • Pendidikan Pancasila SD
+                </div>
+
+                <h2 class="text-3xl md:text-5xl font-black text-sky-900 leading-tight mb-2">
+                    🏠 PETUALANGAN ATURAN DI RUMAH 🏠
+                </h2>
+                <p class="text-sky-700 font-extrabold text-base md:text-xl max-w-2xl mx-auto mb-6">
+                    "Yuk belajar menjadi anak yang disiplin, bertanggung jawab, dan sayang keluarga!"
+                </p>
+
+                <!-- Ilustrasi Keluarga Warm & Collaborative -->
+                <div class="grid grid-cols-4 sm:grid-cols-6 gap-2 max-w-lg mx-auto bg-white/80 p-4 rounded-2xl border-2 border-sky-100 shadow-inner mb-6">
+                    <div class="text-3xl md:text-4xl" title="Ayah Memasak">👨‍🍳</div>
+                    <div class="text-3xl md:text-4xl" title="Ibu Merapikan Buku">👩‍🏫</div>
+                    <div class="text-3xl md:text-4xl" title="Anak Laki-laki Merapikan Mainan">👦</div>
+                    <div class="text-3xl md:text-4xl" title="Anak Perempuan Belajar">👧</div>
+                    <div class="text-3xl md:text-4xl" title="Tempat Tidur Rapi">🛏️</div>
+                    <div class="text-3xl md:text-4xl" title="Meja Belajar">📚</div>
+                </div>
+
+                <!-- Form Identitas Murid -->
+                <div class="max-w-md mx-auto bg-white p-6 rounded-3xl border-3 border-sky-200 shadow-lg space-y-4 text-left">
+                    <h3 class="font-extrabold text-center text-sky-900 text-lg border-b-2 border-sky-100 pb-2">
+                        ✍️ Masukkan Identitas Kamu
+                    </h3>
+                    
+                    <div>
+                        <label class="block font-bold text-sky-800 text-sm mb-1">Pilih Karakter Kamu:</label>
+                        <div class="flex justify-center gap-3" id="avatar-selector">
+                            <button type="button" onclick="selectAvatar('👦')" class="avatar-opt text-3xl p-2 rounded-2xl border-2 border-sky-400 bg-sky-100 shadow-sm">👦</button>
+                            <button type="button" onclick="selectAvatar('👧')" class="avatar-opt text-3xl p-2 rounded-2xl border-2 border-transparent hover:bg-sky-50">👧</button>
+                            <button type="button" onclick="selectAvatar('🧑')" class="avatar-opt text-3xl p-2 rounded-2xl border-2 border-transparent hover:bg-sky-50">🧑</button>
+                            <button type="button" onclick="selectAvatar('🧒')" class="avatar-opt text-3xl p-2 rounded-2xl border-2 border-transparent hover:bg-sky-50">🧒</button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="input-nama" class="block font-bold text-sky-800 text-sm mb-1">Nama Lengkap Murid:</label>
+                        <input type="text" id="input-nama" placeholder="Contoh: Budi Santoso" class="w-full px-4 py-3 rounded-2xl border-2 border-sky-200 focus:border-sky-500 focus:outline-none font-bold text-sky-900 bg-sky-50/50">
+                    </div>
+
+                    <div>
+                        <label for="input-kelas" class="block font-bold text-sky-800 text-sm mb-1">Kelas:</label>
+                        <select id="input-kelas" class="w-full px-4 py-3 rounded-2xl border-2 border-sky-200 focus:border-sky-500 focus:outline-none font-bold text-sky-900 bg-sky-50/50">
+                            <option value="Kelas 2 SD">Kelas 2 SD</option>
+                            <option value="Kelas 2A">Kelas 2A</option>
+                            <option value="Kelas 2B">Kelas 2B</option>
+                            <option value="Kelas 2C">Kelas 2C</option>
+                        </select>
+                    </div>
+
+                    <button onclick="startApp()" class="w-full bg-emerald-400 hover:bg-emerald-500 text-emerald-950 font-black text-lg py-3.5 px-6 rounded-2xl shadow-lg border-b-4 border-emerald-600 btn-bounce flex items-center justify-center gap-2">
+                        🚀 MULAI BELAJAR
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= MENU UTAMA (DASHBOARD) ================= -->
+        <section id="view-menu" class="hidden space-y-6">
+            <div class="bg-gradient-to-r from-sky-400 to-indigo-500 rounded-3xl p-6 text-white shadow-lg flex flex-col md:flex-row items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl md:text-3xl font-black">Halo, <span id="welcome-student-name">Murid</span>! 👋</h2>
+                    <p class="font-bold opacity-90 text-sm md:text-base">Pilih menu kegiatan seru di bawah ini untuk memulai petualanganmu!</p>
+                </div>
+                <div class="bg-white/20 backdrop-blur-md px-4 py-2 rounded-2xl text-center border border-white/30">
+                    <p class="text-xs font-extrabold uppercase tracking-wider">Status Belajar</p>
+                    <p id="menu-completion-status" class="text-lg font-black text-yellow-300">0 / 10 Modul</p>
+                </div>
+            </div>
+
+            <!-- Kartu Menu Utama -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
+                
+                <!-- Menu 1: Mari Belajar -->
+                <div onclick="showView('view-belajar')" class="kawaii-card bg-amber-100 border-amber-300 p-5 rounded-3xl cursor-pointer text-center space-y-2 btn-bounce">
+                    <div class="text-4xl md:text-5xl">📚</div>
+                    <h3 class="font-black text-amber-900 text-base md:text-lg">MARI BELAJAR</h3>
+                    <p class="text-xs font-bold text-amber-700">Mengenal aturan di rumah dengan cerita & gambar</p>
+                </div>
+
+                <!-- Menu 2: Aturan atau Bukan -->
+                <div onclick="showView('view-sorter')" class="kawaii-card bg-sky-100 border-sky-300 p-5 rounded-3xl cursor-pointer text-center space-y-2 btn-bounce">
+                    <div class="text-4xl md:text-5xl">🎯</div>
+                    <h3 class="font-black text-sky-900 text-base md:text-lg">ATURAN / BUKAN?</h3>
+                    <p class="text-xs font-bold text-sky-700">Pilah mana kegiatan yang termasuk aturan</p>
+                </div>
+
+                <!-- Menu 3: Patuh atau Tidak -->
+                <div onclick="showView('view-patuh')" class="kawaii-card bg-emerald-100 border-emerald-300 p-5 rounded-3xl cursor-pointer text-center space-y-2 btn-bounce">
+                    <div class="text-4xl md:text-5xl">🎮</div>
+                    <h3 class="font-black text-emerald-900 text-base md:text-lg">PATUH ATAU TIDAK?</h3>
+                    <p class="text-xs font-bold text-emerald-700">Tebak perilaku dalam contoh situasi singkat</p>
+                </div>
+
+                <!-- Menu 4: Apa Yang Harus Dilakukan -->
+                <div onclick="showView('view-tindakan')" class="kawaii-card bg-indigo-100 border-indigo-300 p-5 rounded-3xl cursor-pointer text-center space-y-2 btn-bounce">
+                    <div class="text-4xl md:text-5xl">💡</div>
+                    <h3 class="font-black text-indigo-900 text-base md:text-lg">TINDAKAN TEPAT</h3>
+                    <p class="text-xs font-bold text-indigo-700">Pilih tindakan baik dalam situasi sehari-hari</p>
+                </div>
+
+                <!-- Menu 5: Akibatnya Apa -->
+                <div onclick="showView('view-akibat')" class="kawaii-card bg-rose-100 border-rose-300 p-5 rounded-3xl cursor-pointer text-center space-y-2 btn-bounce">
+                    <div class="text-4xl md:text-5xl">⚡</div>
+                    <h3 class="font-black text-rose-900 text-base md:text-lg">AKIBATNYA APA?</h3>
+                    <p class="text-xs font-bold text-rose-700">Pelajari akibat mematuhi & melanggar aturan</p>
+                </div>
+
+                <!-- Menu 6: Cocokkan Aturan -->
+                <div onclick="showView('view-matching')" class="kawaii-card bg-purple-100 border-purple-300 p-5 rounded-3xl cursor-pointer text-center space-y-2 btn-bounce">
+                    <div class="text-4xl md:text-5xl">🧩</div>
+                    <h3 class="font-black text-purple-900 text-base md:text-lg">COCOKKAN ATURAN</h3>
+                    <p class="text-xs font-bold text-purple-700">Pasangkan waktu kegiatan dengan aturan tepat</p>
+                </div>
+
+                <!-- Menu 7: Temukan Kesalahan -->
+                <div onclick="showView('view-kesalahan')" class="kawaii-card bg-teal-100 border-teal-300 p-5 rounded-3xl cursor-pointer text-center space-y-2 btn-bounce">
+                    <div class="text-4xl md:text-5xl">🔍</div>
+                    <h3 class="font-black text-teal-900 text-base md:text-lg">TEMUKAN KESALAHAN</h3>
+                    <p class="text-xs font-bold text-teal-700">Cari perilaku yang tidak mematuhi aturan</p>
+                </div>
+
+                <!-- Menu 8: Latihan Soal -->
+                <div onclick="showView('view-latihan')" class="kawaii-card bg-orange-100 border-orange-300 p-5 rounded-3xl cursor-pointer text-center space-y-2 btn-bounce">
+                    <div class="text-4xl md:text-5xl">✏️</div>
+                    <h3 class="font-black text-orange-900 text-base md:text-lg">LATIHAN INTERAKTIF</h3>
+                    <p class="text-xs font-bold text-orange-700">20 soal latihan dengan penjelasan lengkap</p>
+                </div>
+
+                <!-- Menu 9: Tantangan Misi -->
+                <div onclick="showView('view-tantangan')" class="kawaii-card bg-yellow-100 border-yellow-400 p-5 rounded-3xl cursor-pointer text-center space-y-2 btn-bounce">
+                    <div class="text-4xl md:text-5xl">🏆</div>
+                    <h3 class="font-black text-yellow-900 text-base md:text-lg">TANTANGAN 60 DETIK</h3>
+                    <p class="text-xs font-bold text-yellow-800">Uji kecepatanmu menjawab Misi Anak Tertib</p>
+                </div>
+
+                <!-- Menu 10: Aku Anak Tertib & Refleksi -->
+                <div onclick="showView('view-refleksi')" class="kawaii-card bg-emerald-100 border-emerald-400 p-5 rounded-3xl cursor-pointer text-center space-y-2 btn-bounce">
+                    <div class="text-4xl md:text-5xl">🌱</div>
+                    <h3 class="font-black text-emerald-900 text-base md:text-lg">AKU ANAK TERTIB</h3>
+                    <p class="text-xs font-bold text-emerald-800">Isi refleksi harian & buat Kartu Janjiku</p>
+                </div>
+
+                <!-- Menu 11: Dashboard Guru -->
+                <div onclick="showView('view-guru')" class="kawaii-card bg-blue-100 border-blue-300 p-5 rounded-3xl cursor-pointer text-center space-y-2 btn-bounce">
+                    <div class="text-4xl md:text-5xl">📊</div>
+                    <h3 class="font-black text-blue-900 text-base md:text-lg">DASHBOARD GURU</h3>
+                    <p class="text-xs font-bold text-blue-700">Rekap nilai, Google Sheets & Dokumen Guru</p>
+                </div>
+
+                <!-- Menu 12: Panduan Guru -->
+                <div onclick="openGuideModal()" class="kawaii-card bg-slate-100 border-slate-300 p-5 rounded-3xl cursor-pointer text-center space-y-2 btn-bounce">
+                    <div class="text-4xl md:text-5xl">📖</div>
+                    <h3 class="font-black text-slate-900 text-base md:text-lg">PANDUAN GURU</h3>
+                    <p class="text-xs font-bold text-slate-700">Petunjuk penggunaan & perangkat pembelajaran</p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ================= 1. MARI BELAJAR (MATERI) ================= -->
+        <section id="view-belajar" class="hidden space-y-6">
+            <div class="bg-amber-50 border-4 border-amber-200 rounded-3xl p-6 shadow-md">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="text-4xl">📚</span>
+                    <div>
+                        <h2 class="text-2xl font-black text-amber-900">Mari Belajar Aturan di Rumah</h2>
+                        <p class="text-xs md:text-sm font-bold text-amber-700">Pendidikan Pancasila - Elemen UUD NRI Tahun 1945</p>
+                    </div>
+                </div>
+
+                <!-- Penjelasan Pengertian -->
+                <div class="bg-white p-5 rounded-2xl border-2 border-amber-200 space-y-2 shadow-sm mb-6">
+                    <h3 class="text-lg font-black text-amber-800">Apa itu Aturan? 🤔</h3>
+                    <p class="text-sky-900 font-bold leading-relaxed text-base">
+                        "Aturan adalah ketentuan yang harus kita ikuti agar kehidupan rumah menjadi <span class="bg-yellow-200 px-2 py-0.5 rounded-lg text-amber-900">tertib, aman, dan nyaman</span>."
+                    </p>
+                    <p class="text-slate-600 font-bold text-sm">
+                        💡 <span class="italic">Aturan membantu kita tahu apa yang boleh dilakukan dan apa yang sebaiknya tidak dilakukan.</span>
+                    </p>
+                </div>
+
+                <!-- Kartu Aturan Keluarga -->
+                <h3 class="font-black text-amber-900 text-lg mb-3">🏠 Contoh Aturan di Lingkungan Keluarga:</h3>
+                <div id="materi-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Dynamic rendering in JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 2. GAME: ATURAN ATAU BUKAN ================= -->
+        <section id="view-sorter" class="hidden space-y-6">
+            <div class="bg-sky-50 border-4 border-sky-200 rounded-3xl p-6 shadow-md text-center max-w-2xl mx-auto space-y-4">
+                <div class="flex items-center justify-between">
+                    <span class="font-black text-sky-800 text-lg">🎯 Game: Aturan atau Bukan?</span>
+                    <span id="sorter-progress" class="font-black text-sky-600 bg-white px-3 py-1 rounded-full text-sm border border-sky-200">Kartu 1 / 10</span>
+                </div>
+
+                <!-- Card Display -->
+                <div id="sorter-card-box" class="bg-white p-8 rounded-3xl border-3 border-sky-300 shadow-lg space-y-4 min-h-[220px] flex flex-col justify-center items-center">
+                    <span id="sorter-icon" class="text-6xl animate-bounce">🛏️</span>
+                    <p id="sorter-text" class="text-xl font-extrabold text-sky-900 max-w-md">
+                        Merapikan tempat tidur setelah bangun.
+                    </p>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="grid grid-cols-2 gap-4">
+                    <button onclick="checkSorterAnswer(true)" class="bg-emerald-400 hover:bg-emerald-500 text-emerald-950 font-black text-lg py-4 rounded-2xl shadow-md border-b-4 border-emerald-600 btn-bounce">
+                        ✅ ATURAN
+                    </button>
+                    <button onclick="checkSorterAnswer(false)" class="bg-rose-400 hover:bg-rose-500 text-rose-950 font-black text-lg py-4 rounded-2xl shadow-md border-b-4 border-rose-600 btn-bounce">
+                        ❌ BUKAN ATURAN
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 3. GAME: PATUH ATAU TIDAK PATUH ================= -->
+        <section id="view-patuh" class="hidden space-y-6">
+            <div class="bg-emerald-50 border-4 border-emerald-200 rounded-3xl p-6 shadow-md max-w-2xl mx-auto space-y-4">
+                <div class="flex items-center justify-between">
+                    <span class="font-black text-emerald-800 text-lg">🎮 Patuh atau Tidak Patuh?</span>
+                    <span id="patuh-progress" class="font-black text-emerald-700 bg-white px-3 py-1 rounded-full text-sm border border-emerald-200">1 / 15</span>
+                </div>
+
+                <div class="bg-white p-6 rounded-3xl border-2 border-emerald-200 shadow-md space-y-4">
+                    <div class="flex justify-center text-6xl" id="patuh-icon">🧸</div>
+                    <div class="bg-emerald-50/70 p-4 rounded-2xl border border-emerald-100">
+                        <p id="patuh-story" class="text-lg font-bold text-emerald-950 text-center">
+                            "Rani selesai bermain boneka. Ia kemudian memasukkan boneka ke dalam kotak mainan."
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                        <button onclick="checkPatuhAnswer(true)" class="bg-emerald-500 hover:bg-emerald-600 text-white font-black py-3.5 px-4 rounded-2xl shadow border-b-4 border-emerald-700 btn-bounce flex items-center justify-center gap-2">
+                            😊 PATUH ATURAN
+                        </button>
+                        <button onclick="checkPatuhAnswer(false)" class="bg-rose-500 hover:bg-rose-600 text-white font-black py-3.5 px-4 rounded-2xl shadow border-b-4 border-rose-700 btn-bounce flex items-center justify-center gap-2">
+                            😟 TIDAK PATUH ATURAN
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 4. GAME: APA YANG HARUS AKU LAKUKAN ================= -->
+        <section id="view-tindakan" class="hidden space-y-6">
+            <div class="bg-indigo-50 border-4 border-indigo-200 rounded-3xl p-6 shadow-md max-w-2xl mx-auto space-y-4">
+                <div class="flex items-center justify-between">
+                    <span class="font-black text-indigo-900 text-lg">💡 Apa yang Harus Aku Lakukan?</span>
+                    <span id="tindakan-progress" class="font-black text-indigo-700 bg-white px-3 py-1 rounded-full text-sm border border-indigo-200">Situasi 1 / 15</span>
+                </div>
+
+                <div class="bg-white p-6 rounded-3xl border-2 border-indigo-200 shadow-md space-y-4">
+                    <div class="bg-indigo-100/60 p-4 rounded-2xl border border-indigo-200 text-center">
+                        <span class="text-4xl block mb-1" id="tindakan-icon">🗣️</span>
+                        <p id="tindakan-scenario" class="text-lg font-extrabold text-indigo-950">
+                            Ibu meminta kamu merapikan mainan yang berserakan di ruang tamu.
+                        </p>
+                    </div>
+
+                    <div id="tindakan-options" class="space-y-2.5">
+                        <!-- Render options dynamically -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 5. GAME: AKIBATNYA APA ================= -->
+        <section id="view-akibat" class="hidden space-y-6">
+            <div class="bg-rose-50 border-4 border-rose-200 rounded-3xl p-6 shadow-md max-w-2xl mx-auto space-y-4">
+                <div class="flex items-center justify-between">
+                    <span class="font-black text-rose-900 text-lg">⚡ Game: Akibatnya Apa?</span>
+                    <span id="akibat-progress" class="font-black text-rose-700 bg-white px-3 py-1 rounded-full text-sm border border-rose-200">1 / 10</span>
+                </div>
+
+                <div class="bg-white p-6 rounded-3xl border-2 border-rose-200 shadow-md space-y-4">
+                    <div class="text-center space-y-2">
+                        <span class="text-5xl" id="akibat-icon">🧹</span>
+                        <p id="akibat-scenario" class="text-lg font-extrabold text-rose-950">
+                            "Setelah bermain, Dita selalu merapikan mainannya."
+                        </p>
+                        <p class="font-extrabold text-amber-800 text-sm bg-yellow-100 px-3 py-1 rounded-full inline-block">
+                            🤔 Apa akibat dari tindakan Dita?
+                        </p>
+                    </div>
+
+                    <div id="akibat-options" class="grid grid-cols-1 gap-2.5">
+                        <!-- Render options dynamically -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 6. GAME: COCOKKAN ATURAN ================= -->
+        <section id="view-matching" class="hidden space-y-6">
+            <div class="bg-purple-50 border-4 border-purple-200 rounded-3xl p-6 shadow-md max-w-3xl mx-auto space-y-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="font-black text-purple-900 text-xl">🧩 Cocokkan Pasangan Aturan</h2>
+                    <button onclick="initMatchingGame()" class="bg-purple-200 text-purple-800 px-3 py-1 rounded-full text-xs font-bold hover:bg-purple-300">
+                        🔄 Acak Ulang
+                    </button>
+                </div>
+                <p class="text-sm font-bold text-purple-700">Klik satu kartu di Kolom A, lalu klik pasangannya yang cocok di Kolom B!</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Kolom A -->
+                    <div class="space-y-3">
+                        <h3 class="font-black text-purple-900 text-center text-sm uppercase bg-purple-200 py-1.5 rounded-xl">Kolom A (Kegiatan)</h3>
+                        <div id="matching-col-a" class="space-y-2.5"></div>
+                    </div>
+                    <!-- Kolom B -->
+                    <div class="space-y-3">
+                        <h3 class="font-black text-purple-900 text-center text-sm uppercase bg-purple-200 py-1.5 rounded-xl">Kolom B (Aturan / Tindakan)</h3>
+                        <div id="matching-col-b" class="space-y-2.5"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 7. GAME: TEMUKAN KESALAHAN ================= -->
+        <section id="view-kesalahan" class="hidden space-y-6">
+            <div class="bg-teal-50 border-4 border-teal-200 rounded-3xl p-6 shadow-md max-w-3xl mx-auto space-y-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="font-black text-teal-900 text-xl">🔍 Temukan Perilaku Melanggar Aturan</h2>
+                    <span id="kesalahan-progress" class="font-bold text-teal-700 bg-white px-3 py-1 rounded-full text-xs border">Skenario 1 / 5</span>
+                </div>
+                <p class="text-sm font-bold text-teal-700">Klik pada kartu perilaku yang <span class="text-rose-600 underline">TIDAK PATUH</span> aturan di rumah!</p>
+
+                <div class="bg-white p-5 rounded-3xl border-2 border-teal-200 space-y-4 shadow-sm">
+                    <h3 id="kesalahan-title" class="font-black text-teal-950 text-base border-b border-teal-100 pb-2">
+                        Situasi: Aktivitas di Rumah Pada Sore Hari
+                    </h3>
+                    <div id="kesalahan-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <!-- Render behavior cards -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 8. LATIHAN INTERAKTIF (20 SOAL) ================= -->
+        <section id="view-latihan" class="hidden space-y-6">
+            <div class="bg-orange-50 border-4 border-orange-200 rounded-3xl p-6 shadow-md max-w-3xl mx-auto space-y-4">
+                <div class="flex items-center justify-between border-b border-orange-200 pb-3">
+                    <div>
+                        <h2 class="font-black text-orange-950 text-xl">✏️ Latihan Soal Interaktif</h2>
+                        <p class="text-xs font-bold text-orange-700">Evaluasi Pemahaman Aturan Rumah (20 Soal)</p>
+                    </div>
+                    <span id="latihan-num" class="bg-orange-200 text-orange-950 font-black px-4 py-1.5 rounded-full text-sm">
+                        Soal 1 / 20
+                    </span>
+                </div>
+
+                <!-- Quiz Card -->
+                <div class="bg-white p-6 rounded-3xl border-2 border-orange-200 shadow-md space-y-4">
+                    <p id="latihan-question" class="text-lg font-extrabold text-slate-900">
+                        Pertanyaan akan tampil di sini...
+                    </p>
+
+                    <div id="latihan-options" class="space-y-3">
+                        <!-- Options dynamically loaded -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 9. TANTANGAN 60 DETIK ================= -->
+        <section id="view-tantangan" class="hidden space-y-6">
+            <div class="bg-yellow-50 border-4 border-yellow-300 rounded-3xl p-6 shadow-md max-w-2xl mx-auto space-y-4">
+                <div class="text-center space-y-2">
+                    <h2 class="text-2xl font-black text-yellow-950">🏆 MISI ANAK TERTIB</h2>
+                    <p class="text-xs md:text-sm font-bold text-yellow-800">Jawab 10 soal secepat mungkin sebelum waktu 60 detik habis!</p>
+                </div>
+
+                <!-- Progress & Timer Bar -->
+                <div class="bg-white p-4 rounded-2xl border-2 border-yellow-200 flex items-center justify-between gap-4">
+                    <div class="flex-grow">
+                        <div class="flex justify-between text-xs font-black text-yellow-900 mb-1">
+                            <span>Kemajuan Soal</span>
+                            <span id="tantangan-counter">1 / 10</span>
+                        </div>
+                        <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden border">
+                            <div id="tantangan-bar" class="bg-amber-400 h-3 rounded-full transition-all duration-300" style="width: 10%"></div>
+                        </div>
+                    </div>
+                    <div class="text-center bg-rose-100 border border-rose-300 px-3 py-1.5 rounded-2xl">
+                        <span class="block text-[10px] font-black text-rose-700 uppercase">Sisa Waktu</span>
+                        <span id="tantangan-timer" class="text-xl font-black text-rose-600">60s</span>
+                    </div>
+                </div>
+
+                <!-- Question Box -->
+                <div id="tantangan-box" class="bg-white p-6 rounded-3xl border-2 border-yellow-300 shadow-md space-y-4">
+                    <p id="tantangan-question" class="text-lg font-extrabold text-slate-900 text-center">
+                        Pertanyaan Misi...
+                    </p>
+
+                    <div id="tantangan-options" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <!-- Options -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 10. REFLEKSI & KARTU JANJI ================= -->
+        <section id="view-refleksi" class="hidden space-y-6">
+            <div class="bg-emerald-50 border-4 border-emerald-200 rounded-3xl p-6 shadow-md max-w-3xl mx-auto space-y-6">
+                <div class="text-center border-b border-emerald-200 pb-4">
+                    <h2 class="text-2xl font-black text-emerald-950">🌱 AKU ANAK TERTIB 🌱</h2>
+                    <p class="text-sm font-bold text-emerald-700">Mari merefleksikan kebiasaan baikmu di rumah!</p>
+                </div>
+
+                <!-- Form Refleksi -->
+                <div class="space-y-4 bg-white p-6 rounded-3xl border-2 border-emerald-200 shadow-sm">
+                    
+                    <div>
+                        <label class="block font-black text-emerald-900 text-sm mb-1">
+                            1. Aturan apa yang sudah kamu lakukan dengan baik di rumah?
+                        </label>
+                        <textarea id="refleksi-kegiatan" rows="2" placeholder="Contoh: Saya selalu merapikan mainan dan mencuci tangan sebelum makan." class="w-full p-3 rounded-2xl border-2 border-emerald-200 font-bold text-emerald-950 focus:border-emerald-500 focus:outline-none text-sm"></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block font-black text-emerald-900 text-sm mb-1">
+                            2. Aturan apa yang masih ingin kamu tingkatkan lagi?
+                        </label>
+                        <textarea id="refleksi-tingkat" rows="2" placeholder="Contoh: Membantu merapikan tempat tidur sendiri setiap pagi." class="w-full p-3 rounded-2xl border-2 border-emerald-200 font-bold text-emerald-950 focus:border-emerald-500 focus:outline-none text-sm"></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block font-black text-emerald-900 text-sm mb-2">
+                            3. Hari ini aku sudah mematuhi aturan berikut:
+                        </label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm font-bold text-emerald-950">
+                            <label class="flex items-center gap-2 bg-emerald-50 p-2.5 rounded-xl border border-emerald-200 cursor-pointer">
+                                <input type="checkbox" class="refleksi-check rounded text-emerald-600 focus:ring-emerald-400 w-4 h-4" value="Merapikan Tempat Tidur">
+                                Merapikan tempat tidur
+                            </label>
+                            <label class="flex items-center gap-2 bg-emerald-50 p-2.5 rounded-xl border border-emerald-200 cursor-pointer">
+                                <input type="checkbox" class="refleksi-check rounded text-emerald-600 focus:ring-emerald-400 w-4 h-4" value="Merapikan Mainan">
+                                Merapikan mainan
+                            </label>
+                            <label class="flex items-center gap-2 bg-emerald-50 p-2.5 rounded-xl border border-emerald-200 cursor-pointer">
+                                <input type="checkbox" class="refleksi-check rounded text-emerald-600 focus:ring-emerald-400 w-4 h-4" value="Membantu Keluarga">
+                                Membantu pekerjaan rumah
+                            </label>
+                            <label class="flex items-center gap-2 bg-emerald-50 p-2.5 rounded-xl border border-emerald-200 cursor-pointer">
+                                <input type="checkbox" class="refleksi-check rounded text-emerald-600 focus:ring-emerald-400 w-4 h-4" value="Belajar Tepat Waktu">
+                                Belajar tepat waktu
+                            </label>
+                            <label class="flex items-center gap-2 bg-emerald-50 p-2.5 rounded-xl border border-emerald-200 cursor-pointer">
+                                <input type="checkbox" class="refleksi-check rounded text-emerald-600 focus:ring-emerald-400 w-4 h-4" value="Berbicara Sopan">
+                                Berbicara sopan & santun
+                            </label>
+                            <label class="flex items-center gap-2 bg-emerald-50 p-2.5 rounded-xl border border-emerald-200 cursor-pointer">
+                                <input type="checkbox" class="refleksi-check rounded text-emerald-600 focus:ring-emerald-400 w-4 h-4" value="Meminta Izin">
+                                Meminta izin saat keluar
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-black text-emerald-900 text-sm mb-2">
+                            4. Perasaanku setelah mematuhi aturan keluarga:
+                        </label>
+                        <div class="flex justify-around bg-emerald-50 p-3 rounded-2xl border border-emerald-200">
+                            <label class="cursor-pointer text-center">
+                                <input type="radio" name="perasaan" value="Senang" class="peer hidden" checked>
+                                <span class="text-3xl block peer-checked:scale-125 transition-transform">😊</span>
+                                <span class="text-xs font-extrabold text-emerald-800">Senang</span>
+                            </label>
+                            <label class="cursor-pointer text-center">
+                                <input type="radio" name="perasaan" value="Bangga" class="peer hidden">
+                                <span class="text-3xl block peer-checked:scale-125 transition-transform">🥰</span>
+                                <span class="text-xs font-extrabold text-emerald-800">Bangga</span>
+                            </label>
+                            <label class="cursor-pointer text-center">
+                                <input type="radio" name="perasaan" value="Nyaman" class="peer hidden">
+                                <span class="text-3xl block peer-checked:scale-125 transition-transform">🙂</span>
+                                <span class="text-xs font-extrabold text-emerald-800">Nyaman</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button onclick="saveRefleksi()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-black text-lg py-3.5 rounded-2xl shadow-md border-b-4 border-emerald-700 btn-bounce">
+                        💾 SIMPAN REFLEKSI & BUAT KARTU JANJI
+                    </button>
+                </div>
+
+                <!-- Kartu Janji Digital -->
+                <div id="pledge-card" class="hidden bg-gradient-to-b from-yellow-100 to-amber-200 border-4 border-amber-400 p-6 rounded-3xl text-center space-y-4 shadow-xl relative overflow-hidden">
+                    <div class="text-4xl">🌟 JANJIKU 🌟</div>
+                    <p class="font-black text-amber-950 text-xl" id="pledge-student-name">Nama Murid</p>
+                    <p class="font-bold text-amber-900 text-sm" id="pledge-student-class">Kelas 2 SD</p>
+                    
+                    <div class="bg-white/80 p-4 rounded-2xl border border-amber-300 italic font-bold text-amber-950 max-w-md mx-auto">
+                        "Aku berjanji akan mematuhi aturan di lingkungan keluargaku dengan disiplin, penuh tanggung jawab, dan saling menghormati."
+                    </div>
+
+                    <p class="text-xs font-bold text-amber-800" id="pledge-date">Tanggal: 1 Oktober 2026</p>
+
+                    <button onclick="window.print()" class="no-print bg-amber-500 hover:bg-amber-600 text-amber-950 font-black px-6 py-2.5 rounded-2xl shadow border-b-2 border-amber-700 btn-bounce inline-flex items-center gap-2">
+                        📸 CETAK / SIMPAN KARTU JANJI
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 11. DASHBOARD GURU ================= -->
+        <section id="view-guru" class="hidden space-y-6">
+            <div class="bg-blue-50 border-4 border-blue-200 rounded-3xl p-6 shadow-md space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-blue-200 pb-4">
+                    <div>
+                        <h2 class="text-2xl font-black text-blue-950">📊 DASHBOARD GURU</h2>
+                        <p class="text-xs font-bold text-blue-700">Rekap Hasil Belajar & Integrasi Google Apps Script</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="loadTeacherData()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold text-xs px-3 py-2 rounded-xl btn-bounce">
+                            🔄 Muat Ulang Data
+                        </button>
+                        <button onclick="openDocsUrl()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-3 py-2 rounded-xl btn-bounce">
+                            📄 Dokumen Guru
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Summary Cards -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <div class="bg-white p-4 rounded-2xl border border-blue-200 text-center shadow-sm">
+                        <span class="text-xs font-extrabold text-slate-500 uppercase">Jumlah Soal Dikerjakan</span>
+                        <span id="stat-total-quiz" class="block text-2xl font-black text-blue-900">0</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl border border-blue-200 text-center shadow-sm">
+                        <span class="text-xs font-extrabold text-slate-500 uppercase">Nilai Terakhir</span>
+                        <span id="stat-last-score" class="block text-2xl font-black text-emerald-600">-</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl border border-blue-200 text-center shadow-sm">
+                        <span class="text-xs font-extrabold text-slate-500 uppercase">Status Kelulusan</span>
+                        <span id="stat-status" class="block text-sm font-black text-sky-700 mt-1">Belum Tes</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl border border-blue-200 text-center shadow-sm">
+                        <span class="text-xs font-extrabold text-slate-500 uppercase">Total Bintang</span>
+                        <span id="stat-stars" class="block text-2xl font-black text-amber-500">⭐ 0</span>
+                    </div>
+                </div>
+
+                <!-- Google Sheets Settings -->
+                <div class="bg-white p-5 rounded-3xl border-2 border-blue-200 space-y-3">
+                    <h3 class="font-black text-blue-950 text-sm">🔗 Integrasi Google Sheets Web App URL:</h3>
+                    <div class="flex flex-col sm:flex-row gap-2">
+                        <input type="text" id="input-script-url" placeholder="Masukkan URL Google Apps Script Web App di sini..." class="flex-grow px-3 py-2 rounded-xl border border-slate-300 text-xs font-bold focus:outline-none focus:border-blue-500">
+                        <button onclick="saveScriptUrl()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs px-4 py-2 rounded-xl btn-bounce">
+                            Simpan URL
+                        </button>
+                    </div>
+                    <p class="text-[11px] font-bold text-slate-500">
+                        *URL ini digunakan untuk menyimpan rekap nilai otomatis ke Google Sheets.
+                    </p>
+                </div>
+
+                <!-- Student Results Table -->
+                <div class="bg-white rounded-3xl border-2 border-blue-200 overflow-hidden shadow-sm">
+                    <div class="bg-blue-100 p-3 font-black text-blue-900 text-sm flex justify-between items-center">
+                        <span>📋 Riwayat Nilai & Latihan</span>
+                        <button onclick="sendToGoogleSheets()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-3 py-1.5 rounded-lg btn-bounce">
+                            📊 Kirim Hasil ke Google Sheets
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs font-bold text-slate-700">
+                            <thead class="bg-slate-100 border-b border-slate-200 text-slate-600 uppercase">
+                                <tr>
+                                    <th class="p-3">Tanggal</th>
+                                    <th class="p-3">Nama</th>
+                                    <th class="p-3">Kelas</th>
+                                    <th class="p-3">Benar / Salah</th>
+                                    <th class="p-3">Nilai</th>
+                                    <th class="p-3">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-history-body">
+                                <tr>
+                                    <td colspan="6" class="p-4 text-center text-slate-400">Belum ada riwayat pengerjaan.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Feedback Modal -->
+    <div id="feedback-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white border-4 border-sky-300 rounded-3xl p-6 max-w-sm w-full text-center space-y-4 shadow-2xl animate-bounce-short">
+            <div id="feedback-icon" class="text-6xl">🌟</div>
+            <h3 id="feedback-title" class="text-2xl font-black text-sky-950">Hebat Sekali!</h3>
+            <p id="feedback-message" class="text-sm font-bold text-sky-800 leading-relaxed">
+                Kamu sudah memilih tindakan yang tepat.
+            </p>
+            <button onclick="closeFeedbackModal()" class="w-full bg-sky-500 hover:bg-sky-600 text-white font-black py-3 rounded-2xl shadow border-b-4 border-sky-700 btn-bounce">
+                LANJUTKAN 🚀
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal Panduan Guru -->
+    <div id="guide-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white border-4 border-purple-300 rounded-3xl p-6 max-w-xl w-full space-y-4 shadow-2xl max-h-[85vh] overflow-y-auto custom-scrollbar">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h3 class="text-xl font-black text-purple-950">📖 Panduan Guru & Perangkat Media</h3>
+                <button onclick="closeGuideModal()" class="text-slate-400 hover:text-slate-600 font-bold text-lg">✕</button>
+            </div>
+            
+            <div class="space-y-3 text-xs font-bold text-slate-700 leading-relaxed">
+                <p><strong class="text-purple-900">Mata Pelajaran:</strong> Pendidikan Pancasila (Fase A - Kelas 2 SD)</p>
+                <p><strong class="text-purple-900">Materi:</strong> Contoh Sikap dan Perilaku Mematuhi Aturan di Lingkungan Keluarga</p>
+                <p><strong class="text-purple-900">Elemen:</strong> UUD NRI Tahun 1945</p>
+                
+                <hr>
+                
+                <h4 class="font-black text-purple-900 text-sm">💡 Alur Pembelajaran (5 Tahap):</h4>
+                <ol class="list-decimal pl-4 space-y-1 text-slate-800">
+                    <li><strong>BELAJAR:</strong> Murid membaca materi dasar aturan di rumah pada menu "Mari Belajar".</li>
+                    <li><strong>BERMAIN:</strong> Memainkan gim pemilah ("Aturan/Bukan", "Patuh/Tidak", "Temukan Kesalahan").</li>
+                    <li><strong>MEMILIH:</strong> Mengidentifikasi keputusan tepat pada gim "Tindakan Tepat" dan "Akibatnya Apa".</li>
+                    <li><strong>BERLATIH:</strong> Mengerjakan latihan 20 soal interaktif & Misi 60 Detik.</li>
+                    <li><strong>REFLEKSI:</strong> Mengisi lembar refleksi "Aku Anak Tertib" & mencetak Kartu Janji.</li>
+                </ol>
+
+                <hr>
+
+                <h4 class="font-black text-purple-900 text-sm">🔄 Kriteria Remedial & Pengayaan:</h4>
+                <ul class="list-disc pl-4 space-y-1">
+                    <li>Nilai &lt; 75: Ditawarkan moda **Remedial** (Latihan Soal Sederhana).</li>
+                    <li>Nilai &ge; 75: Ditawarkan moda **Pengayaan** (Tantangan Berpikir Kritis).</li>
+                </ul>
+            </div>
+
+            <button onclick="closeGuideModal()" class="w-full bg-purple-600 text-white font-black py-2.5 rounded-2xl btn-bounce">
+                TUTUP PANDUAN
+            </button>
+        </div>
+    </div>
+
+    <footer class="no-print bg-white/80 border-t-2 border-sky-100 py-3 text-center text-xs font-bold text-sky-700">
+        <p> Media Pembelajaran Interaktif Pendidikan Pancasila Kelas 2 SD • Fase A</p>
+    </footer>
+
+    <script>
+        let state = {
+            studentName: '',
+            studentClass: 'Kelas 2 SD',
+            avatar: '👦',
+            stars: 0,
+            completedModules: new Set(),
+            scriptUrl: localStorage.getItem('script_url') || '',
+            docsUrl: 'https://docs.google.com',
+            quizHistory: JSON.parse(localStorage.getItem('quiz_history') || '[]'),
+            audioEnabled: true
+        };
+
+        // Data Skenario & Soal
+        const MATERI_LIST = [
+            { icon: '⏰', title: 'Bangun Tepat Waktu', desc: 'Bangun pagi agar tidak terlambat dan badan tetap segar.' },
+            { icon: '🛏️', title: 'Merapikan Tempat Tidur', desc: 'Merapikan sprei dan bantal setelah bangun tidur.' },
+            { icon: '🧸', title: 'Merapikan Mainan', desc: 'Mengembalikan mainan ke wadahnya setelah selesai bermain.' },
+            { icon: '🧼', title: 'Mencuci Tangan', desc: 'Mencuci tangan dengan sabun sebelum dan sesudah makan.' },
+            { icon: '🍽️', title: 'Makan Dengan Tertib', desc: 'Duduk rapi, berdoa, dan tidak berbicara saat mulut penuh.' },
+            { icon: '🚪', title: 'Meminta Izin Out', desc: 'Meminta izin kepada orang tua saat ingin keluar rumah.' },
+            { icon: '📚', title: 'Belajar Sesuai Jadwal', desc: 'Membaca dan mengerjakan PR pada waktu yang ditentukan.' },
+            { icon: '🌙', title: 'Tidur Tepat Waktu', desc: 'Tidur tidak terlalu malam agar esok hari segar kembali.' },
+            { icon: '🗣️', title: 'Berbicara Sopan', desc: 'Menggunakan bahasa yang santun kepada orang tua dan saudara.' },
+            { icon: '👟', title: 'Menyimpan Sepatu', desc: 'Meletakkan sepatu di rak sepatu setelah pulang sekolah.' },
+            { icon: '👕', title: 'Baju Kotor di Tempatnya', desc: 'Meletakkan pakaian kotor di keranjang cucian.' },
+            { icon: '🤝', title: 'Membantu Pekerjaan Rumah', desc: 'Bekerja sama menyapu atau menyiram tanaman bersama keluarga.' }
+        ];
+
+        const ATURAN_SORTER = [
+            { text: 'Merapikan mainan setelah selesai bermain.', isRule: true, icon: '🧸' },
+            { text: 'Membuang sampah di lantai kamar.', isRule: false, icon: '🗑️' },
+            { text: 'Mencuci tangan sebelum makan.', isRule: true, icon: '🧼' },
+            { text: 'Berteriak keras saat orang tua sedang tidur.', isRule: false, icon: '📢' },
+            { text: 'Meminta izin sebelum keluar rumah.', isRule: true, icon: '🚪' },
+            { text: 'Meninggalkan piring kotor di atas tempat tidur.', isRule: false, icon: '🍽️' },
+            { text: 'Merapikan tempat tidur setelah bangun pagi.', isRule: true, icon: '🛏️' },
+            { text: 'Tidur melampaui larut malam setiap hari.', isRule: false, icon: '🌙' },
+            { text: 'Menyimpan sepatu rapi di rak sepatu.', isRule: true, icon: '👟' },
+            { text: 'Mencoret-coret dinding ruang tamu.', isRule: false, icon: '✏️' }
+        ];
+
+        const PATUH_GAME = [
+            { story: 'Rani selesai bermain boneka. Ia memasukkan bonekanya kembali ke kotak mainan.', isPatuh: true, icon: '🧸' },
+            { story: 'Riko selesai makan siang tetapi meninggalkan piring kotor di lantai.', isPatuh: false, icon: '🍽️' },
+            { story: 'Siti pamit dan bersalaman dengan Ibu sebelum berangkat bermain.', isPatuh: true, icon: '🚪' },
+            { story: 'Budi langsung berlari keluar rumah tanpa meminta izin orang tua.', isPatuh: false, icon: '🏃' },
+            { story: 'Dita menyapa dan berbicara dengan kata yang santun kepada Ayah.', isPatuh: true, icon: '🗣️' },
+            { story: 'Eko menonton TV hingga larut malam sehingga sulit bangun pagi.', isPatuh: false, icon: '📺' },
+            { story: 'Lani segera mematikan keran air setelah bak mandi penuh.', isPatuh: true, icon: '🚰' },
+            { story: 'Doni berebut mainan dengan adiknya hingga adiknya menangis.', isPatuh: false, icon: '🧩' },
+            { story: 'Mita merapikan buku dan alat tulisnya setelah selesai belajar.', isPatuh: true, icon: '📚' },
+            { story: 'Fajar meletakkan sepatu yang kotor di atas meja makan.', isPatuh: false, icon: '👟' },
+            { story: 'Ayu membantu Ibu menyiram bunga di halaman rumah.', isPatuh: true, icon: '🌱' },
+            { story: 'Bagas berteriak saat dipanggil oleh Ibu.', isPatuh: false, icon: '📣' },
+            { story: 'Nia mencuci tangan memakai sabun sebelum makan roti.', isPatuh: true, icon: '🧼' },
+            { story: 'Tono membiarkan pakaian kotor berserakan di kamar.', isPatuh: false, icon: '👕' },
+            { story: 'Sari tidur tepat waktu pada pukul 21.00 malam.', isPatuh: true, icon: '🌙' }
+        ];
+
+        const TINDAKAN_GAME = [
+            {
+                scenario: 'Ibu meminta bantuanmu untuk merapikan mainan di ruang keluarga.',
+                icon: '🧸',
+                options: [
+                    { text: 'Membiarkannya saja.', correct: false },
+                    { text: 'Menyembunyikan mainan di bawah karpet.', correct: false },
+                    { text: 'Merapikan mainan dengan senang hati.', correct: true },
+                    { text: 'Suruh orang lain yang merapikan.', correct: false }
+                ],
+                explanation: 'Merapikan mainan sendiri menunjukkan sikap bertanggung jawab!'
+            },
+            {
+                scenario: 'Kamu ingin pergi bermain sepeda ke rumah teman.',
+                icon: '🚲',
+                options: [
+                    { text: 'Langsung pergi begitu saja.', correct: false },
+                    { text: 'Meminta izin dulu kepada Orang Tua.', correct: true },
+                    { text: 'Pergi diam-diam saat ibu tidur.', correct: false },
+                    { text: 'Berteriak dari luar rumah.', correct: false }
+                ],
+                explanation: 'Meminta izin membuat orang tua tenang dan mengetahui keberadaanmu.'
+            },
+            {
+                scenario: 'Jam menunjukkan pukul 19.00 malam, waktunya belajar.',
+                icon: '⏰',
+                options: [
+                    { text: 'Terus bermain game sampai malam.', correct: false },
+                    { text: 'Menonton TV sepanjang malam.', correct: false },
+                    { text: 'Mempersiapkan buku dan belajar.', correct: true },
+                    { text: 'Langsung tidur berpura-pura sakit.', correct: false }
+                ],
+                explanation: 'Belajar sesuai jadwal membantu kita menjadi murid yang pintar dan disiplin.'
+            }
+            // Additional scenarios rendered dynamically
+        ];
+
+        const AKIBAT_GAME = [
+            {
+                scenario: 'Setelah bermain, Dita selalu merapikan kembali mainannya.',
+                icon: '🧹',
+                question: 'Apa akibat dari kebiasaan baik Dita?',
+                options: [
+                    { text: 'Rumah menjadi rapi dan mainan tidak mudah hilang.', correct: true },
+                    { text: 'Rumah menjadi semakin kotor.', correct: false },
+                    { text: 'Dita dimarahi oleh Orang Tua.', correct: false },
+                    { text: 'Mainan Dita menjadi cepat rusak.', correct: false }
+                ]
+            },
+            {
+                scenario: 'Rafi tidak mau mengikuti aturan waktu tidur dan tidur terlalu malam.',
+                icon: '🌙',
+                question: 'Apa akibat yang mungkin terjadi pada Rafi?',
+                options: [
+                    { text: 'Tubuh terasa makin segar.', correct: false },
+                    { text: 'Bangun kesiangan dan terlambat ke sekolah.', correct: true },
+                    { text: 'Mendapat pujian dari guru.', correct: false },
+                    { text: 'Dapat menyelesaikan tugas sekolah.', correct: false }
+                ]
+            }
+        ];
+
+        const MATCHING_PAIRS = [
+            { id: 1, textA: 'Bangun Pagi', textB: 'Merapikan Tempat Tidur', icon: '⏰' },
+            { id: 2, textA: 'Selesai Bermain', textB: 'Mengembalikan Mainan', icon: '🧸' },
+            { id: 3, textA: 'Sebelum Makan', textB: 'Mencuci Tangan', icon: '🧼' },
+            { id: 4, textA: 'Ingin Keluar Rumah', textB: 'Meminta Izin Orang Tua', icon: '🚪' },
+            { id: 5, textA: 'Malam Hari', textB: 'Tidur Tepat Waktu', icon: '🌙' },
+            { id: 6, textA: 'Pulang Sekolah', textB: 'Menyimpan Sepatu di Rak', icon: '👟' }
+        ];
+
+        const KESALAHAN_SCENARIOS = [
+            {
+                title: 'Skenario 1: Suasana Sore Hari di Rumah',
+                cards: [
+                    { text: 'Adik merapikan mainan di kotak mainan.', isWrong: false, icon: '🧸' },
+                    { text: 'Budi membuang bungkus kue di atas sofa.', isWrong: true, icon: '🍿', note: 'Salah! Sampah harus dibuang ke tempat sampah.' },
+                    { text: 'Kakak belajar menyalin tugas sekolah.', isWrong: false, icon: '✏️' },
+                    { text: 'Ayah dan Ibu menyiram tanaman di taman.', isWrong: false, icon: '🌱' }
+                ]
+            },
+            {
+                title: 'Skenario 2: Waktu Makan Malam Keluarga',
+                cards: [
+                    { text: 'Mencuci tangan sebelum memegang makanan.', isWrong: false, icon: '🧼' },
+                    { text: 'Berbicara dengan mulut penuh makanan.', isWrong: true, icon: '🗣️', note: 'Salah! Berbicara saat mulut penuh bisa tersedak.' },
+                    { text: 'Makan dengan tenang dan tertib.', isWrong: false, icon: '🍽️' },
+                    { text: 'Berdoa sebelum dan sesudah makan.', isWrong: false, icon: '🤲' }
+                ]
+            }
+        ];
+
+        const LATIHAN_SOAL = [
+            { q: 'Aturan di rumah dibuat agar kehidupan keluarga menjadi...', opts: ['A. Kacau dan ramai', 'B. Tertib dan nyaman', 'C. Susah dan sepi'], ans: 1, exp: 'Aturan bertujuan membuat suasana rumah menjadi tertib dan nyaman bagi semua anggota keluarga.' },
+            { q: 'Contoh aturan di rumah pada pagi hari adalah...', opts: ['A. Tidur larut malam', 'B. Merapikan tempat tidur', 'C. Bermain game sampai siang'], ans: 1, exp: 'Merapikan tempat tidur adalah aturan baik saat bangun tidur pagi.' },
+            { q: 'Sebelum makan, kita sebaiknya...', opts: ['A. Mencuci tangan', 'B. Langsung tidur', 'C. Membuang piring'], ans: 0, exp: 'Mencuci tangan menjaga kebersihan agar kuman tidak masuk ke tubuh.' },
+            { q: 'Jika ingin keluar rumah untuk bermain, kita harus...', opts: ['A. Pergi diam-diam', 'B. Meminta izin orang tua', 'C. Lari dengan kencang'], ans: 1, exp: 'Meminta izin agar orang tua tidak cemas mencari keberadaan kita.' },
+            { q: 'Siapa yang wajib mematuhi aturan di rumah?', opts: ['A. Ibu saja', 'B. Anak saja', 'C. Semua anggota keluarga'], ans: 2, exp: 'Aturan keluarga berlaku dan wajib dipatuhi oleh seluruh anggota keluarga.' },
+            { q: 'Selesai bermain, mainan sebaiknya...', opts: ['A. Dibiarkan berserakan', 'B. Dirapikan kembali', 'C. Dibuang ke luar'], ans: 1, exp: 'Merapikan mainan melatih sikap disiplin dan bertanggung jawab.' },
+            { q: 'Akibat dari tidur terlalu malam adalah...', opts: ['A. Bangun lebih segar', 'B. Bangun kesiangan', 'C. Dipuji guru'], ans: 1, exp: 'Kurang tidur menyebabkan tubuh lelah dan bisa kesiangan bangun pagi.' },
+            { q: 'Meletakkan sepatu di rak sepatu setelah dipakai merupakan contoh sikap...', opts: ['A. Tertib', 'B. Malas', 'C. Sombong'], ans: 0, exp: 'Menyimpan barang di tempatnya adalah contoh perilaku tertib.' },
+            { q: 'Saat orang tua berbicara, sebaiknya kita...', opts: ['A. Memotong pembicaraan', 'B. Mendengarkan dengan sopan', 'C. Berteriak keras'], ans: 1, exp: 'Mendengarkan saat orang tua berbicara menunjukkan rasa hormat.' },
+            { q: 'Pakaian kotor yang sudah dipakai harus diletakkan di...', opts: ['A. Atas kasur', 'B. Keranjang baju kotor', 'C. Meja makan'], ans: 1, exp: 'Keranjang baju kotor adalah tempat yang tepat agar rumah tetap bersih.' },
+            { q: 'Membantu pekerjaan rumah seperti menyapu lantai membuat rumah menjadi...', opts: ['A. Bersih dan sehat', 'B. Berdebu', 'C. Kotor'], ans: 0, exp: 'Kerja sama menjaga kebersihan membuat rumah bersih dan sehat.' },
+            { q: 'Belajar sesuai jadwal waktu di rumah manfaatnya adalah...', opts: ['A. Membuat cepat lelah', 'B. Menjadi anak pintar dan disiplin', 'C. Ketinggalan pelajaran'], ans: 1, exp: 'Belajar teratur membantu kita memahami pelajaran dengan baik.' },
+            { q: 'Tindakan yang TIDAK patuh aturan adalah...', opts: ['A. Menonton TV sampai tengah malam', 'B. Merapikan tempat tidur', 'C. Berbicara santun'], ans: 0, exp: 'Menonton TV hingga larut malam melanggar aturan waktu tidur.' },
+            { q: 'Manfaat mematuhi aturan di rumah adalah...', opts: ['A. Rumah menjadi berantakan', 'B. Tercipta suasana rukun', 'C. Dimarahi ayah'], ans: 1, exp: 'Mematuhi aturan menciptakan kedamaian dan kerukunan keluarga.' },
+            { q: 'Jika tidak sengaja merusakkan mainan adik, yang harus dilakukan adalah...', opts: ['A. Lari dan bersembunyi', 'B. Minta maaf dan jujur', 'C. Menyalahkan adik'], ans: 1, exp: 'Jujur dan meminta maaf adalah sikap anak yang bertanggung jawab.' },
+            { q: 'Aturan mematikan lampu kamar saat siang hari bertujuan untuk...', opts: ['A. Menghemat listrik', 'B. Membuang energi', 'C. Merusak lampu'], ans: 0, exp: 'Menghemat energi listrik adalah contoh kebiasaan baik di rumah.' },
+            { q: 'Sebelum masuk ke rumah orang lain atau rumah sendiri, kita mengandalkan kebiasaan...', opts: ['A. Mengucapkan salam', 'B. Langsung masuk tanpa bicara', 'C. Menendang pintu'], ans: 0, exp: 'Mengucapkan salam adalah tata krama sopan santun di lingkungan.' },
+            { q: 'Bekerja sama dalam merapikan rumah tidak hanya tugas ibu, tapi tugas...', opts: ['A. Ayah saja', 'B. Ibu saja', 'C. Semua anggota keluarga'], ans: 2, exp: 'Pekerjaan rumah menjadi ringan jika dikerjakan bersama-sama.' },
+            { q: 'Bicara dengan kata-kata kasar kepada saudara termasuk tindakan...', opts: ['A. Terpuji', 'B. Melanggar aturan sopan santun', 'C. Keren'], ans: 1, exp: 'Berbicara kasar melanggar aturan kesopanan dan membuat orang sedih.' },
+            { q: 'Perasaan setelah kita berhasil mematuhi aturan rumah adalah...', opts: ['A. Senang dan bangga', 'B. Marah-marah', 'C. Kecewa'], ans: 0, exp: 'Anak yang tertib akan merasa bahagia dan dibanggakan keluarga.' }
+        ];
+
+        const TANTANGAN_SOAL = [
+            { q: 'Aturan di rumah harus dipatuhi oleh?', opts: ['Semua Keluarga', 'Tetangga'], ans: 0 },
+            { q: 'Selesai makan piring kotor ditaruh di?', opts: ['Tempat cuci piring', 'Lantai'], ans: 0 },
+            { q: 'Sebelum masuk rumah mengucapkan?', opts: ['Salam', 'Teriakan'], ans: 0 },
+            { q: 'Merapikan tempat tidur dilakukan saat?', opts: ['Bangun tidur', 'Mau mandi'], ans: 0 },
+            { q: 'Jika dipanggil orang tua kita harus?', opts: ['Menjawab sopan', 'Pura-pura tuli'], ans: 0 },
+            { q: 'Membuang sampah harus di?', opts: ['Tempat sampah', 'Bawah kasur'], ans: 0 },
+            { q: 'Belajar dilakukan sesuai?', opts: ['Jadwal', 'Saat mau saja'], ans: 0 },
+            { q: 'Ingin bermain keluar rumah harus?', opts: ['Meminta izin', 'Kabur'], ans: 0 },
+            { q: 'Mencuci tangan menggunakan?', opts: ['Air & Sabun', 'Kain kotor'], ans: 0 },
+            { q: 'Tidur tepat waktu membuat badan?', opts: ['Sehat & Segar', 'Lemas'], ans: 0 }
+        ];
+
+        window.onload = function() {
+            renderMateri();
+            loadUserData();
+            updateHeaderUI();
+        };
+
+        function showView(viewId) {
+            const views = [
+                'view-welcome', 'view-menu', 'view-belajar', 'view-sorter',
+                'view-patuh', 'view-tindakan', 'view-akibat', 'view-matching',
+                'view-kesalahan', 'view-latihan', 'view-tantangan',
+                'view-refleksi', 'view-guru'
+            ];
+
+            views.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('hidden');
+            });
+
+            const targetView = document.getElementById(viewId);
+            if (targetView) targetView.classList.remove('hidden');
+
+            const btnHome = document.getElementById('btn-home');
+            const userHeaderBadge = document.getElementById('user-header-badge');
+
+            if (viewId === 'view-welcome') {
+                btnHome.classList.add('hidden');
+                userHeaderBadge.classList.add('hidden');
+            } else {
+                btnHome.classList.remove('hidden');
+                userHeaderBadge.classList.remove('hidden');
+            }
+
+            // Trigges setup per view
+            if (viewId === 'view-sorter') initSorterGame();
+            if (viewId === 'view-patuh') initPatuhGame();
+            if (viewId === 'view-tindakan') initTindakanGame();
+            if (viewId === 'view-akibat') initAkibatGame();
+            if (viewId === 'view-matching') initMatchingGame();
+            if (viewId === 'view-kesalahan') initKesalahanGame();
+            if (viewId === 'view-latihan') initLatihanQuiz();
+            if (viewId === 'view-tantangan') initTantanganGame();
+            if (viewId === 'view-guru') loadTeacherData();
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function selectAvatar(emoji) {
+            state.avatar = emoji;
+            document.querySelectorAll('.avatar-opt').forEach(btn => {
+                btn.classList.remove('border-sky-400', 'bg-sky-100');
+                btn.classList.add('border-transparent');
+                if (btn.innerText === emoji) {
+                    btn.classList.add('border-sky-400', 'bg-sky-100');
+                    btn.classList.remove('border-transparent');
+                }
+            });
+        }
+
+        function startApp() {
+            const nama = document.getElementById('input-nama').value.trim();
+            const kelas = document.getElementById('input-kelas').value;
+
+            if (!nama) {
+                showFeedbackModal('✍️', 'Isi Nama Dulu Yuk!', 'Masukkan nama lengkap kamu sebelum memulai petualangan.');
+                return;
+            }
+
+            state.studentName = nama;
+            state.studentClass = kelas;
+            saveUserData();
+            updateHeaderUI();
+            showView('view-menu');
+            triggerConfetti();
+        }
+
+        function saveUserData() {
+            localStorage.setItem('student_name', state.studentName);
+            localStorage.setItem('student_class', state.studentClass);
+            localStorage.setItem('student_avatar', state.avatar);
+            localStorage.setItem('student_stars', state.stars);
+        }
+
+        function loadUserData() {
+            state.studentName = localStorage.getItem('student_name') || '';
+            state.studentClass = localStorage.getItem('student_class') || 'Kelas 2 SD';
+            state.avatar = localStorage.getItem('student_avatar') || '👦';
+            state.stars = parseInt(localStorage.getItem('student_stars') || '0');
+
+            if (state.studentName) {
+                document.getElementById('input-nama').value = state.studentName;
+                document.getElementById('input-kelas').value = state.studentClass;
+            }
+        }
+
+        function updateHeaderUI() {
+            document.getElementById('header-avatar').innerText = state.avatar;
+            document.getElementById('header-student-name').innerText = state.studentName || 'Murid';
+            document.getElementById('header-student-class').innerText = state.studentClass;
+            document.getElementById('header-stars').innerText = state.stars;
+            document.getElementById('welcome-student-name').innerText = state.studentName || 'Sahabat Cilik';
+        }
+
+        function addStars(amount) {
+            state.stars += amount;
+            updateHeaderUI();
+            saveUserData();
+        }
+
+        function renderMateri() {
+            const grid = document.getElementById('materi-grid');
+            if (!grid) return;
+
+            grid.innerHTML = MATERI_LIST.map(item => `
+                <div class="bg-white p-4 rounded-2xl border-2 border-amber-200 shadow-sm hover:shadow-md transition-shadow flex items-start gap-3">
+                    <span class="text-3xl bg-amber-100 p-2 rounded-2xl border border-amber-300">${item.icon}</span>
+                    <div>
+                        <h4 class="font-extrabold text-amber-950 text-sm md:text-base">${item.title}</h4>
+                        <p class="text-xs font-bold text-slate-600 leading-snug mt-1">${item.desc}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        let sorterIdx = 0;
+        function initSorterGame() {
+            sorterIdx = 0;
+            renderSorterCard();
+        }
+
+        function renderSorterCard() {
+            if (sorterIdx >= ATURAN_SORTER.length) {
+                showFeedbackModal('🎉', 'Luar Biasa!', 'Kamu telah menyelesaikan permainan Aturan atau Bukan!');
+                addStars(15);
+                showView('view-menu');
+                return;
+            }
+
+            const current = ATURAN_SORTER[sorterIdx];
+            document.getElementById('sorter-progress').innerText = `Kartu ${sorterIdx + 1} / ${ATURAN_SORTER.length}`;
+            document.getElementById('sorter-icon').innerText = current.icon;
+            document.getElementById('sorter-text').innerText = current.text;
+        }
+
+        function checkSorterAnswer(userChoice) {
+            const current = ATURAN_SORTER[sorterIdx];
+            if (userChoice === current.isRule) {
+                showFeedbackModal('🎉', 'Hebat!', current.isRule ? 
+                    'Merapikan mainan & menjaga ketertiban adalah contoh mematuhi aturan!' : 
+                    'Tindakan ini memang bukan aturan yang baik di rumah!');
+                addStars(5);
+                triggerConfetti();
+            } else {
+                showFeedbackModal('😊', 'Coba Lagi Yuk!', 'Pikirkan apakah kegiatan tersebut merupakan kebiasaan yang harus dilakukan di rumah.');
+            }
+            sorterIdx++;
+            renderSorterCard();
+        }
+
+        let patuhIdx = 0;
+        function initPatuhGame() {
+            patuhIdx = 0;
+            renderPatuhCard();
+        }
+
+        function renderPatuhCard() {
+            if (patuhIdx >= PATUH_GAME.length) {
+                showFeedbackModal('🏆', 'Hebat Sekali!', 'Kamu sudah memahami perilaku patuh aturan!');
+                addStars(20);
+                showView('view-menu');
+                return;
+            }
+
+            const current = PATUH_GAME[patuhIdx];
+            document.getElementById('patuh-progress').innerText = `${patuhIdx + 1} / ${PATUH_GAME.length}`;
+            document.getElementById('patuh-icon').innerText = current.icon;
+            document.getElementById('patuh-story').innerText = `"${current.story}"`;
+        }
+
+        function checkPatuhAnswer(userChoice) {
+            const current = PATUH_GAME[patuhIdx];
+            if (userChoice === current.isPatuh) {
+                showFeedbackModal('🌟', 'Jawaban Tepat!', current.isPatuh ? 
+                    'Sikap ini menunjukkan anak yang patuh pada aturan keluarga!' : 
+                    'Benar! Perilaku tersebut adalah contoh tidak mematuhi aturan.');
+                addStars(5);
+                triggerConfetti();
+            } else {
+                showFeedbackModal('😊', 'Yuk Ingat Kembali!', 'Mari kita perhatikan akibat dari tindakan tersebut di rumah.');
+            }
+            patuhIdx++;
+            renderPatuhCard();
+        }
+
+        let tindakanIdx = 0;
+        function initTindakanGame() {
+            tindakanIdx = 0;
+            renderTindakanCard();
+        }
+
+        function renderTindakanCard() {
+            if (tindakanIdx >= TINDAKAN_GAME.length) {
+                showFeedbackModal('🎓', 'Selesai!', 'Kamu anak yang pintar mengambil keputusan baik!');
+                addStars(20);
+                showView('view-menu');
+                return;
+            }
+
+            const current = TINDAKAN_GAME[tindakanIdx];
+            document.getElementById('tindakan-progress').innerText = `Situasi ${tindakanIdx + 1} / ${TINDAKAN_GAME.length}`;
+            document.getElementById('tindakan-icon').innerText = current.icon;
+            document.getElementById('tindakan-scenario').innerText = current.scenario;
+
+            const optsBox = document.getElementById('tindakan-options');
+            optsBox.innerHTML = current.options.map((opt, i) => `
+                <button onclick="checkTindakanAnswer(${opt.correct}, '${current.explanation}')" class="w-full text-left p-3.5 bg-indigo-50 hover:bg-indigo-100 rounded-2xl border border-indigo-200 font-bold text-indigo-950 text-sm flex items-center gap-3 btn-bounce">
+                    <span class="w-7 h-7 bg-indigo-200 rounded-full flex items-center justify-center text-xs font-black">${String.fromCharCode(65 + i)}</span>
+                    ${opt.text}
+                </button>
+            `).join('');
+        }
+
+        function checkTindakanAnswer(isCorrect, explanation) {
+            if (isCorrect) {
+                showFeedbackModal('🌟', 'Hebat!', explanation);
+                addStars(10);
+                triggerConfetti();
+            } else {
+                showFeedbackModal('😊', 'Belum Tepat', 'Yuk pilih tindakan yang bertanggung jawab di rumah.');
+            }
+            tindakanIdx++;
+            renderTindakanCard();
+        }
+
+        let akibatIdx = 0;
+        function initAkibatGame() {
+            akibatIdx = 0;
+            renderAkibatCard();
+        }
+
+        function renderAkibatCard() {
+            if (akibatIdx >= AKIBAT_GAME.length) {
+                showFeedbackModal('🏅', 'Luar Biasa!', 'Kamu makin paham akibat mematuhi & melanggar aturan!');
+                addStars(15);
+                showView('view-menu');
+                return;
+            }
+
+            const current = AKIBAT_GAME[akibatIdx];
+            document.getElementById('akibat-progress').innerText = `${akibatIdx + 1} / ${AKIBAT_GAME.length}`;
+            document.getElementById('akibat-icon').innerText = current.icon;
+            document.getElementById('akibat-scenario').innerText = `"${current.scenario}"`;
+
+            const optsBox = document.getElementById('akibat-options');
+            optsBox.innerHTML = current.options.map((opt, i) => `
+                <button onclick="checkAkibatAnswer(${opt.correct})" class="w-full text-left p-3.5 bg-rose-50 hover:bg-rose-100 rounded-2xl border border-rose-200 font-bold text-rose-950 text-sm btn-bounce">
+                    ${opt.text}
+                </button>
+            `).join('');
+        }
+
+        function checkAkibatAnswer(isCorrect) {
+            if (isCorrect) {
+                showFeedbackModal('🎉', 'Jawaban Tepat!', 'Mematuhi aturan memberikan akibat yang positif bagi rumah kita!');
+                addStars(10);
+                triggerConfetti();
+            } else {
+                showFeedbackModal('😊', 'Coba Lagi', 'Pikirkan akibat paling masuk akal bagi keluarga.');
+            }
+            akibatIdx++;
+            renderAkibatCard();
+        }
+
+        let selectedColA = null;
+        function initMatchingGame() {
+            selectedColA = null;
+            const shuffledA = [...MATCHING_PAIRS].sort(() => Math.random() - 0.5);
+            const shuffledB = [...MATCHING_PAIRS].sort(() => Math.random() - 0.5);
+
+            const containerA = document.getElementById('matching-col-a');
+            const containerB = document.getElementById('matching-col-b');
+
+            containerA.innerHTML = shuffledA.map(item => `
+                <button id="match-a-${item.id}" onclick="selectMatchingA(${item.id})" class="match-btn-a w-full text-left p-3 bg-white hover:bg-purple-100 rounded-2xl border-2 border-purple-200 font-bold text-purple-950 text-xs sm:text-sm flex items-center justify-between shadow-sm">
+                    <span>${item.icon} ${item.textA}</span>
+                    <span class="text-purple-400">➡️</span>
+                </button>
+            `).join('');
+
+            containerB.innerHTML = shuffledB.map(item => `
+                <button id="match-b-${item.id}" onclick="selectMatchingB(${item.id})" class="match-btn-b w-full text-left p-3 bg-white hover:bg-purple-100 rounded-2xl border-2 border-purple-200 font-bold text-purple-950 text-xs sm:text-sm flex items-center justify-between shadow-sm">
+                    <span>${item.textB}</span>
+                    <span class="text-purple-400">🧩</span>
+                </button>
+            `).join('');
+        }
+
+        function selectMatchingA(id) {
+            selectedColA = id;
+            document.querySelectorAll('.match-btn-a').forEach(btn => btn.classList.remove('bg-purple-300', 'border-purple-500'));
+            const activeBtn = document.getElementById(`match-a-${id}`);
+            if (activeBtn) activeBtn.classList.add('bg-purple-300', 'border-purple-500');
+        }
+
+        function selectMatchingB(id) {
+            if (!selectedColA) {
+                showFeedbackModal('💡', 'Petunjuk', 'Klik salah satu tombol di Kolom A terlebih dahulu!');
+                return;
+            }
+
+            if (selectedColA === id) {
+                showFeedbackModal('🎉', 'Pasangan Tepat!', 'Hebat! Kamu berhasil mencocokkan pasangan aturan!');
+                document.getElementById(`match-a-${id}`).classList.add('opacity-40', 'pointer-events-none', 'bg-emerald-100');
+                document.getElementById(`match-b-${id}`).classList.add('opacity-40', 'pointer-events-none', 'bg-emerald-100');
+                addStars(10);
+                triggerConfetti();
+            } else {
+                showFeedbackModal('😊', 'Yuk Coba Lagi', 'Pasangan ini kurang cocok, mari cari pasangan lain.');
+            }
+            selectedColA = null;
+            document.querySelectorAll('.match-btn-a').forEach(btn => btn.classList.remove('bg-purple-300', 'border-purple-500'));
+        }
+
+        let kesalahanIdx = 0;
+        function initKesalahanGame() {
+            kesalahanIdx = 0;
+            renderKesalahanCard();
+        }
+
+        function renderKesalahanCard() {
+            if (kesalahanIdx >= KESALAHAN_SCENARIOS.length) {
+                showFeedbackModal('🔎', 'Selesai!', 'Kamu sangat teliti menemukan perilaku yang tidak patuh!');
+                addStars(20);
+                showView('view-menu');
+                return;
+            }
+
+            const current = KESALAHAN_SCENARIOS[kesalahanIdx];
+            document.getElementById('kesalahan-progress').innerText = `Skenario ${kesalahanIdx + 1} / ${KESALAHAN_SCENARIOS.length}`;
+            document.getElementById('kesalahan-title').innerText = current.title;
+
+            const grid = document.getElementById('kesalahan-grid');
+            grid.innerHTML = current.cards.map((card, i) => `
+                <div onclick="checkKesalahanCard(${card.isWrong}, '${card.note || ''}')" class="p-4 bg-teal-50/60 hover:bg-teal-100 border-2 border-teal-200 rounded-2xl cursor-pointer flex items-center gap-3 btn-bounce">
+                    <span class="text-3xl">${card.icon}</span>
+                    <p class="text-xs md:text-sm font-bold text-teal-950">${card.text}</p>
+                </div>
+            `).join('');
+        }
+
+        function checkKesalahanCard(isWrong, note) {
+            if (isWrong) {
+                showFeedbackModal('🎉', 'Tepat Sekali!', note || 'Kamu menemukan perilaku yang melanggar aturan!');
+                addStars(10);
+                triggerConfetti();
+                kesalahanIdx++;
+                renderKesalahanCard();
+            } else {
+                showFeedbackModal('😊', 'Perilaku Patuh', 'Tindakan ini sudah mematuhi aturan di rumah.');
+            }
+        }
+
+        let quizIdx = 0;
+        let quizScore = 0;
+        let quizCorrectCount = 0;
+
+        function initLatihanQuiz() {
+            quizIdx = 0;
+            quizScore = 0;
+            quizCorrectCount = 0;
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            if (quizIdx >= LATIHAN_SOAL.length) {
+                finishLatihanQuiz();
+                return;
+            }
+
+            const current = LATIHAN_SOAL[quizIdx];
+            document.getElementById('latihan-num').innerText = `Soal ${quizIdx + 1} / ${LATIHAN_SOAL.length}`;
+            document.getElementById('latihan-question').innerText = current.q;
+
+            const optsBox = document.getElementById('latihan-options');
+            optsBox.innerHTML = current.opts.map((opt, i) => `
+                <button onclick="submitQuizAnswer(${i})" class="w-full text-left p-3.5 bg-orange-50 hover:bg-orange-100 rounded-2xl border-2 border-orange-200 font-bold text-orange-950 text-sm btn-bounce">
+                    ${opt}
+                </button>
+            `).join('');
+        }
+
+        function submitQuizAnswer(selectedIdx) {
+            const current = LATIHAN_SOAL[quizIdx];
+            if (selectedIdx === current.ans) {
+                quizCorrectCount++;
+                showFeedbackModal('🎉', 'BENAR!', current.exp);
+                addStars(5);
+                triggerConfetti();
+            } else {
+                showFeedbackModal('😊', 'BELUM TEPAT', current.exp);
+            }
+
+            quizIdx++;
+            renderQuizQuestion();
+        }
+
+        function finishLatihanQuiz() {
+            const total = LATIHAN_SOAL.length;
+            const finalScore = Math.round((quizCorrectCount / total) * 100);
+            const statusStr = finalScore >= 75 ? 'Tuntas' : 'Perlu Bimbingan';
+
+            // Save history
+            const resultEntry = {
+                date: new Date().toLocaleDateString('id-ID'),
+                nama: state.studentName,
+                kelas: state.studentClass,
+                benar: quizCorrectCount,
+                salah: total - quizCorrectCount,
+                nilai: finalScore,
+                status: statusStr
+            };
+
+            state.quizHistory.unshift(resultEntry);
+            localStorage.setItem('quiz_history', JSON.stringify(state.quizHistory));
+
+            let message = `Nilai Kamu: ${finalScore} / 100.\nBenar: ${quizCorrectCount}, Salah: ${total - quizCorrectCount}.`;
+            
+            if (finalScore >= 75) {
+                showFeedbackModal('🏆', 'Hebat! Kamu Tuntas!', message + '\nKamu sudah memahami aturan keluarga dengan sangat baik!');
+            } else {
+                showFeedbackModal('🌱', 'Tetap Semangat!', message + '\nYuk pelajari kembali menu "Mari Belajar" dan latihan lagi!');
+            }
+
+            showView('view-menu');
+        }
+
+        let tantanganIdx = 0;
+        let tantanganTimer = null;
+        let tantanganTimeLeft = 60;
+        let tantanganScore = 0;
+
+        function initTantanganGame() {
+            tantanganIdx = 0;
+            tantanganTimeLeft = 60;
+            tantanganScore = 0;
+            
+            if (tantanganTimer) clearInterval(tantanganTimer);
+            
+            tantanganTimer = setInterval(() => {
+                tantanganTimeLeft--;
+                document.getElementById('tantangan-timer').innerText = `${tantanganTimeLeft}s`;
+                if (tantanganTimeLeft <= 0) {
+                    clearInterval(tantanganTimer);
+                    finishTantangan();
+                }
+            }, 1000);
+
+            renderTantanganQuestion();
+        }
+
+        function renderTantanganQuestion() {
+            if (tantanganIdx >= TANTANGAN_SOAL.length) {
+                clearInterval(tantanganTimer);
+                finishTantangan();
+                return;
+            }
+
+            const current = TANTANGAN_SOAL[tantanganIdx];
+            document.getElementById('tantangan-counter').innerText = `${tantanganIdx + 1} / ${TANTANGAN_SOAL.length}`;
+            document.getElementById('tantangan-bar').style.width = `${((tantanganIdx + 1) / TANTANGAN_SOAL.length) * 100}%`;
+            document.getElementById('tantangan-question').innerText = current.q;
+
+            const optsBox = document.getElementById('tantangan-options');
+            optsBox.innerHTML = current.opts.map((opt, i) => `
+                <button onclick="answerTantangan(${i})" class="w-full p-4 bg-yellow-100 hover:bg-yellow-200 rounded-2xl border-2 border-yellow-300 font-black text-yellow-950 text-sm btn-bounce">
+                    ${opt}
+                </button>
+            `).join('');
+        }
+
+        function answerTantangan(idx) {
+            const current = TANTANGAN_SOAL[tantanganIdx];
+            if (idx === current.ans) {
+                tantanganScore += 10;
+                addStars(2);
+            }
+            tantanganIdx++;
+            renderTantanganQuestion();
+        }
+
+        function finishTantangan() {
+            showFeedbackModal('🚀', 'MISI SELESAI!', `Nilai Misi Kamu: ${tantanganScore} / 100.\nWaktu Tersisa: ${tantanganTimeLeft} detik.`);
+            showView('view-menu');
+        }
+
+        function saveRefleksi() {
+            const kegiatan = document.getElementById('refleksi-kegiatan').value.trim();
+            if (!kegiatan) {
+                showFeedbackModal('✍️', 'Isi Refleksi', 'Tuliskan sedikit contoh aturan yang sudah kamu lakukan di rumah.');
+                return;
+            }
+
+            document.getElementById('pledge-student-name').innerText = state.studentName || 'Murid Tertib';
+            document.getElementById('pledge-student-class').innerText = state.studentClass;
+            document.getElementById('pledge-date').innerText = `Tanggal: ${new Date().toLocaleDateString('id-ID')}`;
+            
+            document.getElementById('pledge-card').classList.remove('hidden');
+            showFeedbackModal('🎉', 'Refleksi Tersimpan!', 'Kartu Janjiku berhasil dibuat. Kamu bisa mencetaknya!');
+            triggerConfetti();
+        }
+
+        function loadTeacherData() {
+            const history = state.quizHistory;
+            document.getElementById('stat-total-quiz').innerText = history.length;
+            
+            if (history.length > 0) {
+                const last = history[0];
+                document.getElementById('stat-last-score').innerText = `${last.nilai} / 100`;
+                document.getElementById('stat-status').innerText = last.status;
+            }
+
+            document.getElementById('stat-stars').innerText = `⭐ ${state.stars}`;
+            document.getElementById('input-script-url').value = state.scriptUrl;
+
+            const tbody = document.getElementById('table-history-body');
+            if (history.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-400">Belum ada riwayat pengerjaan.</td></tr>`;
+            } else {
+                tbody.innerHTML = history.map(item => `
+                    <tr class="border-b border-slate-100 hover:bg-slate-50">
+                        <td class="p-3">${item.date}</td>
+                        <td class="p-3 font-extrabold text-blue-900">${item.nama}</td>
+                        <td class="p-3">${item.kelas}</td>
+                        <td class="p-3 text-emerald-600">${item.benar} / <span class="text-rose-500">${item.salah}</span></td>
+                        <td class="p-3 font-black">${item.nilai}</td>
+                        <td class="p-3"><span class="px-2 py-1 rounded-full text-[10px] ${item.nilai >= 75 ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">${item.status}</span></td>
+                    </tr>
+                `).join('');
+            }
+        }
+
+        function saveScriptUrl() {
+            const url = document.getElementById('input-script-url').value.trim();
+            state.scriptUrl = url;
+            localStorage.setItem('script_url', url);
+            showFeedbackModal('✅', 'Berhasil', 'URL Google Apps Script berhasil disimpan!');
+        }
+
+        function sendToGoogleSheets() {
+            if (!state.scriptUrl) {
+                showFeedbackModal('⚠️', 'URL Belum Diisi', 'Silakan masukkan URL Google Apps Script Web App terlebih dahulu pada kolom yang tersedia.');
+                return;
+            }
+
+            if (state.quizHistory.length === 0) {
+                showFeedbackModal('ℹ️', 'Data Kosong', 'Kerjakan Latihan Soal terlebih dahulu sebelum mengirim data.');
+                return;
+            }
+
+            const latest = state.quizHistory[0];
+            const dataPayload = {
+                nama: latest.nama,
+                kelas: latest.kelas,
+                tanggal: latest.date,
+                mataPelajaran: "Pendidikan Pancasila",
+                materi: "Contoh Sikap dan Perilaku Mematuhi Aturan di Lingkungan Keluarga",
+                elemen: "UUD NRI Tahun 1945",
+                jumlahSoal: 20,
+                benar: latest.benar,
+                salah: latest.salah,
+                nilai: latest.nilai,
+                status: latest.status,
+                refleksi: document.getElementById('refleksi-kegiatan')?.value || "Sudah diisi"
+            };
+
+            fetch(state.scriptUrl, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dataPayload)
+            })
+            .then(() => {
+                showFeedbackModal('✅', 'Berhasil Dikirim!', 'Hasil belajar berhasil dikirim ke Google Sheets.');
+            })
+            .catch(() => {
+                showFeedbackModal('⚠️', 'Gagal Mengirim', 'Hasil belum tersimpan. Silakan periksa koneksi internet atau URL Script.');
+            });
+        }
+
+        function openDocsUrl() {
+            window.open(state.docsUrl, '_blank');
+        }
+
+        function showFeedbackModal(icon, title, msg) {
+            document.getElementById('feedback-icon').innerText = icon;
+            document.getElementById('feedback-title').innerText = title;
+            document.getElementById('feedback-message').innerText = msg;
+            document.getElementById('feedback-modal').classList.remove('hidden');
+        }
+
+        function closeFeedbackModal() {
+            document.getElementById('feedback-modal').classList.add('hidden');
+        }
+
+        function openGuideModal() {
+            document.getElementById('guide-modal').classList.remove('hidden');
+        }
+
+        function closeGuideModal() {
+            document.getElementById('guide-modal').classList.add('hidden');
+        }
+
+        function toggleAudio() {
+            state.audioEnabled = !state.audioEnabled;
+            const btn = document.getElementById('btn-audio');
+            if (state.audioEnabled) {
+                btn.innerHTML = `<i class="fa-solid fa-volume-high"></i>`;
+                btn.classList.replace('bg-slate-200', 'bg-emerald-100');
+            } else {
+                btn.innerHTML = `<i class="fa-solid fa-volume-xmark"></i>`;
+                btn.classList.replace('bg-emerald-100', 'bg-slate-200');
+            }
+        }
+
+        function triggerConfetti() {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 50,
+                    spread: 60,
+                    origin: { y: 0.7 }
+                });
+            }
+        }
+    </script>
+</body>
+</html>
